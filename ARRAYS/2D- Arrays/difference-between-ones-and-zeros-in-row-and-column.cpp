@@ -1,39 +1,36 @@
-/*
- 
-    Company Tags                : GOOGLE
-    Leetcode Link               : https://leetcode.com/problems/diagonal-traverse-ii/
-*/
-
-//Approach-1 (Using map)
-//T.C : O(n) where n = all elements in grid
-//S.C : O(n) We took map to store all elements
 class Solution {
 public:
-    vector<int> findDiagonalOrder(vector<vector<int>>& nums) {
-        unordered_map<int, vector<int>> mp;
+    vector<vector<int>> onesMinusZeros(vector<vector<int>>& grid) {
+           int m = grid.size();
+        int n = grid[0].size();
         
+        vector<int> rowOnes(m, 0);
+        vector<int> colOnes(n, 0);
         
-        for(int row = nums.size()-1; row >= 0; row--) {
-            for(int col = 0; col < nums[row].size(); col++) {
+        for(int i = 0; i<m; i++) {
+            for(int j = 0; j<n; j++) {
                 
-                mp[row+col].push_back(nums[row][col]);
-                
+                if(grid[i][j] == 1) {
+                    rowOnes[i]++;
+                    colOnes[j]++;
+                } 
             }
         }
         
-        vector<int> result;
-        int diagonal = 0;
+        vector<vector<int>> diff(m, vector<int>(n, 0));
         
-        while(mp.find(diagonal) != mp.end()) {
-            
-            for(int &num : mp[diagonal]) {
-                result.push_back(num);
+        for(int i = 0; i<m; i++) {
+            for(int j = 0; j<n; j++) {
+                int onesRowi = rowOnes[i];
+                int onesColj = colOnes[j];
+                
+                int zerosRowi = n-onesRowi;
+                int zerosColj = m-onesColj;
+                
+                diff[i][j] = onesRowi + onesColj - zerosRowi - zerosColj;
             }
-            diagonal++;
         }
         
-        return result;
-        
+        return diff;
     }
 };
-
